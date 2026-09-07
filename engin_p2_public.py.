@@ -1,0 +1,73 @@
+# SKYNET / ENGIN-P2
+# PUBLIC DISCLOSURE PART
+#
+# EXCLUDED FROM PUBLIC VERSION:
+# - HiddenRule
+# - information-transfer law
+# - spawn / self-reproduction
+# - recursion
+# - harmonic mechanisms
+# - harmonic formulas
+# - dimensionality-reduction mechanism/formula
+#
+# Kernel is intentionally retained.
+
+from dataclasses import dataclass, field
+from typing import Any
+
+
+@dataclass(frozen=True)
+class Observation:
+    value: Any
+
+
+@dataclass(frozen=True)
+class InformationNode:
+    node_id: str
+    observation: Observation
+
+
+@dataclass
+class Kernel:
+    kernel_id: str
+    nodes: dict[str, InformationNode] = field(default_factory=dict)
+
+    def add_node(self, node: InformationNode) -> None:
+        if node.node_id in self.nodes:
+            raise ValueError("node already exists")
+
+        self.nodes[node.node_id] = node
+
+    def get_node(self, node_id: str) -> InformationNode:
+        if node_id not in self.nodes:
+            raise KeyError(node_id)
+
+        return self.nodes[node_id]
+
+    def contains(self, node_id: str) -> bool:
+        return node_id in self.nodes
+
+    def size(self) -> int:
+        return len(self.nodes)
+
+
+class ENGINP2:
+    def __init__(self) -> None:
+        self.kernels: dict[str, Kernel] = {}
+
+    def create_kernel(self, kernel_id: str) -> Kernel:
+        if kernel_id in self.kernels:
+            raise ValueError("kernel already exists")
+
+        kernel = Kernel(kernel_id=kernel_id)
+        self.kernels[kernel_id] = kernel
+        return kernel
+
+    def get_kernel(self, kernel_id: str) -> Kernel:
+        if kernel_id not in self.kernels:
+            raise KeyError(kernel_id)
+
+        return self.kernels[kernel_id]
+
+    def kernel_count(self) -> int:
+        return len(self.kernels)
